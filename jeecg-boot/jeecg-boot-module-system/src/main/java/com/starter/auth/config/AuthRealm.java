@@ -1,12 +1,14 @@
 package com.starter.auth.config;
 
+import com.common.util.YesNo;
 import com.starter.auth.helper.UserInfoHelper;
 import com.starter.auth.model.UserInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.shiro.authc.ShiroRealm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -40,5 +42,21 @@ public class AuthRealm extends ShiroRealm {
         authInfo.addStringPermissions(permissionSet);
 
         return authInfo;
+    }
+
+    @Override
+    public LoginUser checkUserTokenIsEffect(String token) throws AuthenticationException {
+        LoginUser user = super.checkUserTokenIsEffect(token);
+
+        // 判断是否限制单点登录
+        if (user != null && YesNo.isYes(user.getSoloLogin())) {
+            UserInfo userInfo = userInfoHelper.getUserInfo(token);
+            if (userInfo == null) {
+                log.info("多客户端登录: " + user.getId() + "，无效token：" + token);
+                throw new AuthenticationException("账号仅允许单点登录，请联系管理员!");
+            }
+        }
+
+        return user;
     }
 }

@@ -29,6 +29,15 @@ public class AuthFilter extends JwtFilter {
         this.userInfoHelper = userInfoHelper;
     }
 
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        try {
+            return executeLogin(request, response);
+        } catch (Exception e) {
+            throw new AuthenticationException(e.getMessage());
+        }
+    }
+
     /**
      * 登录用户不是管理员时，限制调用JeecgBoot项目的sys接口和online在线表单开发
      *

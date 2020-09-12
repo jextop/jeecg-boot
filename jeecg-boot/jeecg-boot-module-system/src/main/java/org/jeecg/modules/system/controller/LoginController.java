@@ -104,7 +104,10 @@ public class LoginController {
 			result.error500("用户名或密码错误");
 			return result;
 		}
-				
+
+		//3. 处理用户单点登录
+		userInfoHelper.soloLogin(sysUser);
+
 		//用户登录信息
 		userInfo(sysUser, result);
 		sysBaseAPI.addLog("用户名: " + username + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
@@ -331,6 +334,10 @@ public class LoginController {
 			result.setMessage("手机验证码错误");
 			return result;
 		}
+
+		//处理用户单点登录
+		userInfoHelper.soloLogin(sysUser);
+
 		//用户信息
 		userInfo(sysUser, result);
 		//添加日志
@@ -465,6 +472,9 @@ public class LoginController {
 		// 设置超时时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+
+		// 处理用户单点登录
+		userInfoHelper.soloLogin(sysUser);
 
 		// 缓存用户信息
 		userInfoHelper.cacheUserInfo(token, sysUser);

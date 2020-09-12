@@ -109,6 +109,9 @@ public class ThirdLoginController {
     		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
     		modelMap.addAttribute("token", token);
 
+			// 处理用户单点登录
+			userInfoHelper.soloLogin(user);
+
 			// 缓存用户信息
 			userInfoHelper.cacheUserInfo(token, user);
         }

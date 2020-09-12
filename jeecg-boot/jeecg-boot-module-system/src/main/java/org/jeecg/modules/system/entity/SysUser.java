@@ -191,4 +191,9 @@ public class SysUser implements Serializable {
      * 多租户id配置，编辑用户的时候设置
      */
     private String relTenantIds;
+
+    /**
+     * 是否允许多终端同时登录，0或空无限制，1不允许多客户端同时登陆
+     */
+    private Integer soloLogin;
 }
