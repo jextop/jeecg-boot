@@ -88,6 +88,11 @@
           </a-select>
         </a-form-item>
 
+        <!-- 多客户端同时登录 -->
+        <a-form-item label="仅允许单点登录" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  v-decorator="['soloLogin', {}]" placeholder="请选择是否仅允许单点登录" :type="'radio'" :triggerChange="true" dictCode="yn"/>
+        </a-form-item>
+
        <!-- update--begin--autor:wangshuai-----date:20200108------for：新增身份和负责部门------ -->
         <a-form-item label="身份" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-radio-group
@@ -340,7 +345,7 @@
       add () {
         this.picUrl = "";
         this.refresh();
-        this.edit({activitiSync:'1'});
+        this.edit({activitiSync:'1', soloLogin:'0'});
       },
       edit (record) {
         this.resetScreenSize(); // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
@@ -358,7 +363,7 @@
         that.visible = true;
         that.model = Object.assign({}, record);
         that.$nextTick(() => {
-          that.form.setFieldsValue(pick(this.model,'username','sex','realname','email','phone','activitiSync','workNo','telephone','post'))
+          that.form.setFieldsValue(pick(this.model,'username','sex','realname','email','phone','activitiSync','workNo','telephone','post', 'soloLogin'))
         });
         //身份为上级显示负责部门，否则不显示
         if(this.model.userIdentity=="2"){

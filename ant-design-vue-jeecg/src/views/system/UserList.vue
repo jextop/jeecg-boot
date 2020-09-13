@@ -256,6 +256,12 @@
             dataIndex: 'phone'
           },
           {
+            title: '仅允许单点登录',
+            align: "center",
+            width: 100,
+            dataIndex: 'soloLogin'
+          },
+          {
             title: '部门',
             align: "center",
             width: 180,

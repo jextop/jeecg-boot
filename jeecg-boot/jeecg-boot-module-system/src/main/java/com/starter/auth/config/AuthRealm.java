@@ -53,7 +53,7 @@ public class AuthRealm extends ShiroRealm {
             UserInfo userInfo = userInfoHelper.getUserInfo(token);
             if (userInfo == null) {
                 log.info("多客户端登录: " + user.getId() + "，无效token：" + token);
-                throw new AuthenticationException("账号仅允许单点登录，请联系管理员!");
+                throw new AuthenticationException("仅允许单点登录，请联系管理员!");
             }
         }
 

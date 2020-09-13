@@ -34,14 +34,16 @@ const err = (error) => {
       case 500:
 		let path = window.location.href
         //notification.error({ message: '系统提示', description:'Token失效，请重新登录!',duration: 4})
-        if(token && data.message=="Token失效，请重新登录" && path.indexOf('/user/login') < 0){
+        if(token && path.indexOf('/user/login') < 0 && (
+          data.message=="Token失效，请重新登录" || data.message=="仅允许单点登录，请联系管理员!"
+        )){
           // update-begin- --- author:scott ------ date:20190225 ---- for:Token失效采用弹框模式，不直接跳转----
           // store.dispatch('Logout').then(() => {
           //     window.location.reload()
           // })
           Modal.error({
             title: '登录已过期',
-            content: '很抱歉，登录已过期，请重新登录',
+            content: data.message,
             okText: '重新登录',
             mask: false,
             onOk: () => {
