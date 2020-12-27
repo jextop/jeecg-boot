@@ -13,10 +13,10 @@ import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.schema.Column;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
 import org.jeecg.modules.system.util.TenantContext;
+import org.jeecg.common.util.oConvertUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -65,8 +65,8 @@ public class MybatisPlusConfig {
 
             @Override
             public Expression getTenantId(boolean select) {
-                String tenantId = TenantContext.getTenant();
-                return StringUtils.isEmpty(tenantId) ? null : new LongValue(tenantId);
+                String tenant_id = oConvertUtils.getString(TenantContext.getTenant(),"0");
+                return new LongValue(tenant_id);
             }
             @Override
             public String getTenantIdColumn() {
