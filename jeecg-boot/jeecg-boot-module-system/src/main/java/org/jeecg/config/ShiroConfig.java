@@ -64,6 +64,10 @@ public class ShiroConfig {
 			}
 		}
 
+		// com.starter
+		filterChainDefinitionMap.put("/auth/captcha/**", "anon");
+		filterChainDefinitionMap.put("/auth/sms/fake", "anon");
+
 		//cas验证登录
 		filterChainDefinitionMap.put("/cas/client/validateLogin", "anon");
 		// 配置不会被拦截的链接 顺序判断

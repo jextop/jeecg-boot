@@ -1,0 +1,358 @@
+{
+	"info": {
+		"_postman_id": "07957d1c-23bb-48c4-968f-c85c75e3fb85",
+		"name": "jeecg-boot-auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/auth/captcha/{{key}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.startsWith('data:image')"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var num = Math.floor(Math.random() * 10000 + 1)",
+							"",
+							"postman.setEnvironmentVariable(\"key\", num);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/auth/captcha/{{key}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"auth",
+						"captcha",
+						"{{key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/captcha/txt/{{key}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.length === 4;",
+							"",
+							"postman.setEnvironmentVariable(\"captcha\", jsonData.result);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var num = Math.floor(Math.random() * 10000 + 1)",
+							"",
+							"postman.setEnvironmentVariable(\"key\", num);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/auth/captcha/txt/{{key}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"auth",
+						"captcha",
+						"txt",
+						"{{key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sys/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.token.length > 0;",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.result.token);",
+							"postman.setEnvironmentVariable(\"tenant-id\", jsonData.result.userInfo.relTenantIds);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"admin\",\r\n\t\"password\": \"123456\",\r\n\t\"remember_me\": true,\r\n\t\"captcha\": \"{{captcha}}\",\r\n\t\"checkKey\": \"{{key}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/sys/login",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"sys",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sys/loginfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"success\"] = jsonData.success === true;\r",
+							"tests[\"result\"] = jsonData.result.totalVisitCount > 0;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/sys/loginfo",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"sys",
+						"loginfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sys/logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/sys/logout",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"sys",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/sms/fake",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.length > 0;",
+							"",
+							"postman.setEnvironmentVariable(\"sms-code\", jsonData.result);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/auth/sms/fake?mobile=18611111111",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"auth",
+						"sms",
+						"fake"
+					],
+					"query": [
+						{
+							"key": "mobile",
+							"value": "18611111111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sys/phoneLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.token.length > 0;",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.result.token);",
+							"postman.setEnvironmentVariable(\"tenant-id\", jsonData.result.userInfo.relTenantIds);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"mobile\": \"18611111111\",\r\n\t\"captcha\": \"{{sms-code}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/sys/phoneLogin",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"sys",
+						"phoneLogin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sys/loginfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"success\"] = jsonData.success === true;\r",
+							"tests[\"result\"] = jsonData.result.totalVisitCount > 0;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/sys/loginfo",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"sys",
+						"loginfo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
