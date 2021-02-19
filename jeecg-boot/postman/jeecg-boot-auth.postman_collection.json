@@ -249,7 +249,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{server}}:{{port}}/{{base-url}}/auth/sms/fake?mobile=18611111111",
+					"raw": "{{server}}:{{port}}/{{base-url}}/auth/sms/fake?mobile=13800001604",
 					"host": [
 						"{{server}}"
 					],
@@ -263,7 +263,7 @@
 					"query": [
 						{
 							"key": "mobile",
-							"value": "18611111111"
+							"value": "13800001604"
 						}
 					]
 				}
@@ -293,7 +293,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"mobile\": \"18611111111\",\r\n\t\"captcha\": \"{{sms-code}}\"\r\n}",
+					"raw": "{\r\n\t\"mobile\": \"13800001604\",\r\n\t\"captcha\": \"{{sms-code}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
