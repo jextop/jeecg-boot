@@ -1,6 +1,7 @@
 package org.jeecg.config;
 
 import com.starter.auth.config.AuthFilter;
+import com.starter.auth.config.AuthRealm;
 import com.starter.auth.helper.UserInfoHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -15,7 +16,6 @@ import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisClusterManager;
 import org.crazycake.shiro.RedisManager;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.shiro.authc.ShiroRealm;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,6 +68,7 @@ public class ShiroConfig {
 		}
 
 		// com.starter
+		filterChainDefinitionMap.put("/chk", "anon");
 		filterChainDefinitionMap.put("/auth/captcha/**", "anon");
 		filterChainDefinitionMap.put("/auth/sms/fake", "anon");
 
@@ -143,7 +144,7 @@ public class ShiroConfig {
 	}
 
 	@Bean("securityManager")
-	public DefaultWebSecurityManager securityManager(ShiroRealm myRealm) {
+	public DefaultWebSecurityManager securityManager(AuthRealm myRealm) {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		securityManager.setRealm(myRealm);
 

@@ -32,7 +32,6 @@ import lombok.extern.slf4j.Slf4j;
  * @Date: 2019-4-23 8:13
  * @Version: 1.1
  */
-@Component
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
 

@@ -1,6 +1,7 @@
 package com.starter.auth.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author dingxl
@@ -14,6 +15,8 @@ public class UserInfo implements Serializable {
     private String realname;
     private String phone;
     private String relTenantIds;
+    private List<String> roleList;
+    private List<String> actionList;
 
     public String getId() {
         return id;
@@ -53,5 +56,21 @@ public class UserInfo implements Serializable {
 
     public void setRelTenantIds(String relTenantIds) {
         this.relTenantIds = relTenantIds;
+    }
+
+    public List<String> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<String> roleList) {
+        this.roleList = roleList;
+    }
+
+    public List<String> getActionList() {
+        return actionList;
+    }
+
+    public void setActionList(List<String> actionList) {
+        this.actionList = actionList;
     }
 }
