@@ -1,5 +1,7 @@
 package org.jeecg.config;
 
+import com.starter.auth.config.AuthFilter;
+import com.starter.auth.helper.UserInfoHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -14,8 +16,8 @@ import org.crazycake.shiro.RedisClusterManager;
 import org.crazycake.shiro.RedisManager;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.shiro.authc.ShiroRealm;
-import org.jeecg.modules.shiro.authc.aop.JwtFilter;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +40,8 @@ import java.util.*;
 @Slf4j
 @Configuration
 public class ShiroConfig {
-
+	@Autowired
+	UserInfoHelper userInfoHelper;
 	@Value("${jeecg.shiro.excludeUrls}")
 	private String excludeUrls;
 	@Resource
@@ -127,7 +130,7 @@ public class ShiroConfig {
 
 		// 添加自己的过滤器并且取名为jwt
 		Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
-		filterMap.put("jwt", new JwtFilter());
+		filterMap.put("jwt", new AuthFilter(userInfoHelper));
 		shiroFilterFactoryBean.setFilters(filterMap);
 		// <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
 		filterChainDefinitionMap.put("/**", "jwt");

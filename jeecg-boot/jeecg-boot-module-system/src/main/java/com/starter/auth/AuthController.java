@@ -1,6 +1,7 @@
 package com.starter.auth;
 
 import cn.hutool.core.util.RandomUtil;
+import com.starter.auth.config.AuthConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;

@@ -2,6 +2,7 @@ package org.jeecg.modules.system.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.starter.auth.helper.UserInfoHelper;
 import com.xkcoding.justauth.AuthRequestFactory;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.model.AuthCallback;
@@ -39,13 +40,15 @@ import java.util.List;
 public class ThirdLoginController {
 	@Autowired
 	private ISysUserService sysUserService;
-	
+
 	@Autowired
 	private ISysBaseAPI sysBaseAPI;
 	@Autowired
     private RedisUtil redisUtil;
 	@Autowired
 	private AuthRequestFactory factory;
+	@Autowired
+	UserInfoHelper userInfoHelper;
 
 	@RequestMapping("/render/{source}")
     public void render(@PathVariable("source") String source, HttpServletResponse response) throws IOException {
@@ -105,7 +108,9 @@ public class ThirdLoginController {
     		// 设置超时时间
     		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
     		modelMap.addAttribute("token", token);
-    		
+
+			// 缓存用户信息
+			userInfoHelper.cacheUserInfo(token, user);
         }
         result.setSuccess(false);
         result.setMessage("第三方登录异常,请联系管理员");

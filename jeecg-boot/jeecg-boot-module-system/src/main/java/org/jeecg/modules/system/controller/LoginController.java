@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.starter.auth.helper.UserInfoHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,8 @@ public class LoginController {
     private ISysDepartService sysDepartService;
 	@Autowired
     private ISysDictService sysDictService;
+	@Autowired
+	UserInfoHelper userInfoHelper;
 
 	private static final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 
@@ -125,6 +128,8 @@ public class LoginController {
 	    String username = JwtUtil.getUsername(token);
 		LoginUser sysUser = sysBaseAPI.getUserByName(username);
 	    if(sysUser!=null) {
+	    	userInfoHelper.deleteUserInfo(token);
+
 	    	sysBaseAPI.addLog("用户名: "+sysUser.getRealname()+",退出成功！", CommonConstant.LOG_TYPE_1, null);
 	    	log.info(" 用户名:  "+sysUser.getRealname()+",退出成功！ ");
 	    	//清空用户登录Token缓存
@@ -351,6 +356,9 @@ public class LoginController {
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
 
+		// 缓存用户信息
+		userInfoHelper.cacheUserInfo(token, sysUser);
+
 		// 获取用户部门信息
 		JSONObject obj = new JSONObject();
 		List<SysDepart> departs = sysDepartService.queryUserDeparts(sysUser.getId());
@@ -457,6 +465,10 @@ public class LoginController {
 		// 设置超时时间
 		redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
 		redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME*2 / 1000);
+
+		// 缓存用户信息
+		userInfoHelper.cacheUserInfo(token, sysUser);
+
 		//token 信息
 		obj.put("token", token);
 		result.setResult(obj);

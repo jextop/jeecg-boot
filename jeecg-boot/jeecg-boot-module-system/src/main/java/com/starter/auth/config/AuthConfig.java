@@ -1,4 +1,4 @@
-package com.starter.auth;
+package com.starter.auth.config;
 
 /**
  * @author dingxl
@@ -12,4 +12,7 @@ public class AuthConfig {
     public static final int SMS_LENGTH = 6;
     public static final int SMS_LIFETIME = 60 * 10;
     public static final String[] PHONE_WHITE_ARRAY = new String[]{"13800001604", "18611111111"};
+
+    public static final String USER_INFO_CACHE_KEY = "user_info";
+    public static final int USER_INFO_DURATION = 7 * 24 * 3600;
 }
