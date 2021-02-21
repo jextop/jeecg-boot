@@ -1,4 +1,4 @@
-package com.starter.util;
+package com.common.http;
 
 import org.jeecg.modules.shiro.vo.DefContants;
 import org.springframework.web.context.request.RequestContextHolder;

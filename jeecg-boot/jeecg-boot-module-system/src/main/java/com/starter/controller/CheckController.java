@@ -1,5 +1,6 @@
 package com.starter.controller;
 
+import com.starter.annotation.AccessLimited;
 import com.starter.auth.annotation.RequiresAdmin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 /**
- * @Author: dingxl@xsheep.vip
- * @since 2020-10-04 13:07
+ * @Author: dingxl
  */
 @Api(tags = {"检查运行状态"})
 @RestController
@@ -24,12 +24,14 @@ public class CheckController {
     @Autowired
     RedisUtil redisUtil;
 
+    @AccessLimited
     @ApiOperation("检查服务是否运行")
     @GetMapping
     public String chk() {
         return "ok";
     }
 
+    @AccessLimited(count = 1)
     @RequiresAdmin
     @ApiOperation("检查缓存系统")
     @GetMapping("/cache")

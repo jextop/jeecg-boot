@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.starter.auth.config.AuthConfig;
 import com.starter.auth.model.UserInfo;
-import com.starter.util.RequestContext;
+import com.common.http.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.jeecg.common.api.vo.Result;

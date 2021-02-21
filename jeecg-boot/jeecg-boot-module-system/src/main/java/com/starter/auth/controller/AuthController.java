@@ -1,6 +1,7 @@
-package com.starter.auth;
+package com.starter.auth.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import com.starter.annotation.AccessLimited;
 import com.starter.auth.config.AuthConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,7 @@ public class AuthController {
     @Autowired
     RedisUtil redisUtil;
 
+    @AccessLimited(key = "captcha")
     @ApiOperation("获取图片验证码")
     @GetMapping("/captcha/{key}")
     public Result<String> captcha(@PathVariable String key) throws IOException {
@@ -40,6 +42,7 @@ public class AuthController {
         return result;
     }
 
+    @AccessLimited(count = 1, key = "captcha")
     @ApiOperation("获取文本验证码。注意生成环境限制访问。")
     @GetMapping("/captcha/txt/{key}")
     public Result<String> txtCaptcha(@PathVariable String key) {
@@ -55,6 +58,7 @@ public class AuthController {
         }};
     }
 
+    @AccessLimited(count = 1)
     @ApiOperation("获取短信验证码，接口返回，不真实发送。注意安全措施：1，限制手机号码白名单；2，生产环境清理白名单。")
     @PostMapping("/sms/fake")
     public Result<String> fakeSms(@RequestParam String mobile) {
