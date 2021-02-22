@@ -10,9 +10,7 @@ import java.util.List;
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id;
     private String username;
-    private String realname;
     private String phone;
     private List<String> roleList;
     private List<String> actionList;
@@ -22,28 +20,12 @@ public class UserInfo implements Serializable {
      */
     private String relTenantIds;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public void setRealname(String realname) {
-        this.realname = realname;
     }
 
     public String getPhone() {
