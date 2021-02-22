@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  */
 @RestControllerAdvice
 @Slf4j
-public class ApiResponseHandler implements ResponseBodyAdvice<Object> {
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter param, Class clazz) {
         return true;
