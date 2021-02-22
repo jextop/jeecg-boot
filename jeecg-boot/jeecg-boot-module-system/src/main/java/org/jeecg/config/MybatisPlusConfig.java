@@ -6,17 +6,19 @@ import com.baomidou.mybatisplus.core.parser.SqlParserHelper;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
+import com.starter.auth.helper.UserInfoHelper;
+import com.starter.config.TenantParser;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.schema.Column;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
-import org.jeecg.config.mybatis.JeecgTenantParser;
 import org.jeecg.modules.system.util.TenantContext;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,6 +33,8 @@ import java.util.List;
 @Configuration
 @MapperScan(value={"org.jeecg.modules.**.mapper*", "com.starter.**.mapper*"})
 public class MybatisPlusConfig {
+    @Autowired
+    UserInfoHelper userInfoHelper;
 
     /**
      * tenant_id 字段名
@@ -56,13 +60,13 @@ public class MybatisPlusConfig {
          * 这里固定写成住户 1 实际情况你可以从cookie读取，因此数据看不到 【 麻花藤 】 这条记录（ 注意观察 SQL ）<br>
          */
         List<ISqlParser> sqlParserList = new ArrayList<>();
-        TenantSqlParser tenantSqlParser = new JeecgTenantParser();
+        TenantSqlParser tenantSqlParser = new TenantParser(userInfoHelper);
         tenantSqlParser.setTenantHandler(new TenantHandler() {
 
             @Override
             public Expression getTenantId(boolean select) {
-                String tenant_id = TenantContext.getTenant();
-                return new LongValue(tenant_id);
+                String tenantId = TenantContext.getTenant();
+                return StringUtils.isEmpty(tenantId) ? null : new LongValue(tenantId);
             }
             @Override
             public String getTenantIdColumn() {

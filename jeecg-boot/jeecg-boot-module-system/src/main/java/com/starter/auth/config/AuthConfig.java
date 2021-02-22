@@ -16,5 +16,5 @@ public class AuthConfig {
     public static final String USER_INFO_CACHE_KEY = "user_info";
     public static final int USER_INFO_DURATION = 7 * 24 * 3600;
 
-    public static final String[] ADMIN_ROLE_CODE_ARRAY = new String[]{"admin", "tenant_admin"};
+    public static final String[] ADMIN_ROLE_CODE_ARRAY = new String[]{UserRole.ADMIN, "platform_admin"};
 }
