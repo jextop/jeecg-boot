@@ -14,9 +14,13 @@ public class UserInfo implements Serializable {
     private String username;
     private String realname;
     private String phone;
-    private String relTenantIds;
     private List<String> roleList;
     private List<String> actionList;
+
+    /**
+     * 所属租户只支持一个。如果同时属于多个租户，前端选择，后端保存，功能待扩展。
+     */
+    private String relTenantIds;
 
     public String getId() {
         return id;

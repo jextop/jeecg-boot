@@ -33,15 +33,12 @@ public class AuthRealm extends ShiroRealm {
 
         // 获取角色: admin, tenant
         Set<String> roleSet = UserRole.getRoles(userInfo);
-        if (CollectionUtils.isNotEmpty(roleSet)) {
-            authInfo.addRoles(roleSet);
-        }
+        authInfo.addRoles(roleSet);
 
         // 获取权限: user_add, tenant_add
         Set<String> permissionSet = Permission.getPermissions(userInfo);
-        if (CollectionUtils.isNotEmpty(permissionSet)) {
-            authInfo.addStringPermissions(permissionSet);
-        }
+        authInfo.addStringPermissions(permissionSet);
+
         return authInfo;
     }
 }

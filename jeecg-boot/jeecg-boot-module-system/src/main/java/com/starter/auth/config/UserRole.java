@@ -1,7 +1,9 @@
 package com.starter.auth.config;
 
 import com.starter.auth.model.UserInfo;
+import com.starter.auth.util.UserUtil;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,10 +28,16 @@ public class UserRole {
 
         // 获取角色
         List<String> roles = userInfo.getRoleList();
-        return new HashSet<String>() {{
+        Set<String> roleSet = new HashSet<String>() {{
             if (CollectionUtils.isNotEmpty(roles)) {
                 addAll(roles);
             }
         }};
+
+        // 自定义角色，或者数据库角色名称和代码中不一致：租户
+        if (UserUtil.isAdmin(roles) && StringUtils.isNotEmpty(userInfo.getRelTenantIds())) {
+            roleSet.add(TENANT);
+        }
+        return roleSet;
     }
 }
