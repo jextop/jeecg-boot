@@ -48,7 +48,7 @@ public class AuthFilter extends JwtFilter {
         boolean ret = super.preHandle(request, response);
 
         UserInfo userInfo = userInfoHelper.getUserInfo();
-        if (!UserUtil.isAdmin(userInfo)) {
+        if (userInfo != null && !UserUtil.isAdmin(userInfo)) {
             HttpServletRequest servletRequest = (HttpServletRequest) request;
             String requestUrl = servletRequest.getRequestURI();
             for(String adminUrl : ADMIN_URL_ARRAY) {
