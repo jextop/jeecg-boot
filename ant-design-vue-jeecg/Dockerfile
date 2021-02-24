@@ -1,7 +1,9 @@
-FROM nginx
-MAINTAINER jeecgos@163.com
-VOLUME /tmp
+FROM registry.cn-shanghai.aliyuncs.com/hellodock/nginx:latest
+
+LABEL maintainer="Jext Community, https://github.com/jextop"
+
 ENV LANG en_US.UTF-8
+
 RUN echo "server {  \
                       listen       80; \
                       location ^~ /jeecg-boot { \
@@ -19,11 +21,12 @@ RUN echo "server {  \
                           break; \
                       } \
                   } \
-                  access_log  /var/log/nginx/access.log ; \
+                  #access_log  /var/log/nginx/access.log ; \
               } " > /etc/nginx/conf.d/default.conf \
     &&  mkdir  -p  /var/www \
     &&  mkdir -p /var/www/html
 
-ADD dist/ /var/www/html/
+ADD ./dist/ /var/www/html/
+
 EXPOSE 80
 EXPOSE 443
