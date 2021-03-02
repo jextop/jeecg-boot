@@ -7,6 +7,15 @@ spring:
     validate-on-migrate: true
     placeholder-replacement: false
 
+# 阿里云
+ali:
+  # OSS云存储
+  oss:
+    endpoint: oss-cn-shanghai.aliyuncs.com
+    accessKey: input_your_own_access_key
+    secretKey: input_your_own_secret_key
+
+# API文档
 swagger:
   production: false
   basic:

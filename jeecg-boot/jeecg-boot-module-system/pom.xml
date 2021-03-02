@@ -41,6 +41,13 @@
 			<artifactId>flyway-core</artifactId>
 			<version>5.2.4</version>
 		</dependency>
+
+		<!-- 阿里云OSS -->
+		<dependency>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>3.6.0</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

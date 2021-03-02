@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "cc4d8d1d-6e1d-4404-a2db-8949f63294d5",
+		"name": "jeecg-boot-ali",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/auth/captcha/txt/{{key}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.length === 4;",
+							"",
+							"postman.setEnvironmentVariable(\"captcha\", jsonData.result);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var num = Math.floor(Math.random() * 10000 + 1)",
+							"",
+							"postman.setEnvironmentVariable(\"key\", num);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/auth/captcha/txt/{{key}}",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"auth",
+						"captcha",
+						"txt",
+						"{{key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/sys/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"success\"] = jsonData.success === true;",
+							"tests[\"result\"] = jsonData.result.token.length > 0;",
+							"",
+							"postman.setEnvironmentVariable(\"token\", jsonData.result.token);",
+							"postman.setEnvironmentVariable(\"tenant-id\", jsonData.result.userInfo.relTenantIds);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"username\": \"admin\",\r\n\t\"password\": \"123456\",\r\n\t\"remember_me\": true,\r\n\t\"captcha\": \"{{captcha}}\",\r\n\t\"checkKey\": \"{{key}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/sys/login",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"sys",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/oss/upload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"success\"] = jsonData.status === true;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Access-Token",
+						"type": "text",
+						"value": "{{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{server}}:{{port}}/{{base-url}}/oss/upload",
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"{{base-url}}",
+						"oss",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
