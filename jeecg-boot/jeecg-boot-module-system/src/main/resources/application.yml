@@ -9,6 +9,13 @@ spring:
 
 # 阿里云
 ali:
+  # 短信服务
+  sms:
+    region: cn-shanghai
+    sign-name: Jext技术社区
+    access-key: input_your_own_access_key
+    secret-key: input_your_own_secret_key
+
   # api网关
   api:
     app-code: input_your_own_app_code
