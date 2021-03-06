@@ -1,7 +1,7 @@
 package com.starter.ali.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.starter.ali.util.BankNameUtil;
+import com.common.util.BankNameUtil;
 import com.starter.ali.util.HttpUtils;
 import com.starter.ali.util.RespUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author dingxl
@@ -46,7 +45,7 @@ public class BankNumberHelper {
         // 根据银行代码查找名称
         if (ret.getBooleanValue(CARD_VALIDATED_FLAG)) {
             String code = ret.getString(BANK_CODE_FLAG);
-            ret.put(BANK_NAME_FLAG, BankNameUtil.nameJson.getString(code));
+            ret.put(BANK_NAME_FLAG, BankNameUtil.getName(code));
         }
         return ret;
     }

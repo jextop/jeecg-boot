@@ -1,13 +1,18 @@
-package com.starter.ali.util;
+package com.common.util;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author dingxl
  * @date 3/5/2021 8:48 PM
  */
 public class BankNameUtil {
-    public static final JSONObject nameJson = JSONObject.parseObject(
+    public static String getName(String bankCode) {
+        return StringUtils.isEmpty(bankCode) ? null : nameJson.getString(StringUtils.upperCase(bankCode));
+    }
+
+    private static final JSONObject nameJson = JSONObject.parseObject(
             "{ \"SRCB\": \"深圳农村商业银行\",\"BGB\": \"广西北部湾银行\"," +
             "\"SHRCB\": \"上海农村商业银行\",\"BJBANK\": \"北京银行\",\"WHCCB\": " +
             "\"威海市商业银行\",\"BOZK\": \"周口银行\",\"KORLABANK\": \"库尔勒市商业银行\"" +
