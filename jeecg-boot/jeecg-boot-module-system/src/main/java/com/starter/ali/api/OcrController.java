@@ -1,7 +1,5 @@
 package com.starter.ali.api;
 
-import com.alibaba.fastjson.JSONObject;
-import com.starter.ali.util.RespUtil;
 import com.starter.annotation.AccessLimited;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,8 +41,8 @@ public class OcrController {
             return Result.error("身份证不能为空！");
         }
 
-        JSONObject result = ocrService.idCard(b64Image, side);
-        if (RespUtil.isSuccess(result)) {
+        OcrModel result = ocrService.idCard(b64Image, side);
+        if (result.isSuccess()) {
             return Result.OK(result);
         }
 
@@ -66,8 +64,8 @@ public class OcrController {
             return Result.error("银行卡不能为空！");
         }
 
-        JSONObject result = ocrService.bankcard(b64Image);
-        if (RespUtil.isSuccess(result)) {
+        OcrModel result = ocrService.bankcard(b64Image);
+        if (result.isSuccess()) {
             return Result.OK(result);
         }
 
@@ -89,8 +87,8 @@ public class OcrController {
             return Result.error("营业执照不能为空！");
         }
 
-        JSONObject result = ocrService.businessLicense(b64Image);
-        if (RespUtil.isSuccess(result)) {
+        OcrModel result = ocrService.businessLicense(b64Image);
+        if (result.isSuccess()) {
             return Result.OK(result);
         }
 

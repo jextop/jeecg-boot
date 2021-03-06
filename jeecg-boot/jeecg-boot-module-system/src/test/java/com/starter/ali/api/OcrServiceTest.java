@@ -1,8 +1,6 @@
 package com.starter.ali.api;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.starter.ali.util.RespUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.jeecg.JeecgApplication;
@@ -40,24 +38,24 @@ public class OcrServiceTest {
     @Test
     public void testIdCard() throws IOException {
         String b64 = getB64File("id-card.jpg");
-        JSONObject ret = ocrService.idCard(b64, "face");
+        OcrModel ret = ocrService.idCard(b64, "face");
         log.info(JSON.toJSONString(ret));
-        Assert.assertTrue(RespUtil.isSuccess(ret));
+        Assert.assertTrue(ret.isSuccess());
     }
 
     @Test
     public void testBankcard() throws IOException {
         String b64 = getB64File("bankcard.jpg");
-        JSONObject ret = ocrService.bankcard(b64);
+        OcrModel ret = ocrService.bankcard(b64);
         log.info(JSON.toJSONString(ret));
-        Assert.assertTrue(RespUtil.isSuccess(ret));
+        Assert.assertTrue(ret.isSuccess());
     }
 
     @Test
     public void testBusinessLicense() throws IOException {
         String b64 = getB64File("business-license.jpg");
-        JSONObject ret = ocrService.businessLicense(b64);
+        OcrModel ret = ocrService.businessLicense(b64);
         log.info(JSON.toJSONString(ret));
-        Assert.assertTrue(RespUtil.isSuccess(ret));
+        Assert.assertTrue(ret.isSuccess());
     }
 }

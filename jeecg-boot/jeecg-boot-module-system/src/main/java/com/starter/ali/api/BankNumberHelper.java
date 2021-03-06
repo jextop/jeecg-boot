@@ -1,11 +1,13 @@
 package com.starter.ali.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.common.util.BankNameUtil;
 import com.starter.ali.util.HttpUtils;
-import com.starter.ali.util.RespUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import java.util.HashMap;
 @Slf4j
 public class BankNumberHelper {
     /**
-     * 请求接口和参数
+     * 请求接口和参数，免费公开，不需要配置权限
      */
     private static final String CARD_URL = "https://ccdcapi.alipay.com/validateAndCacheCardInfo.json";
     private static final String CARD_NO = "cardNo";
@@ -40,7 +42,7 @@ public class BankNumberHelper {
             put(CARD_BIN_CHECK, CARD_BIN_CHECK_FLAG);
         }}, null);
 
-        JSONObject ret = RespUtil.getResult(response);
+        JSONObject ret = getResult(response);
 
         // 根据银行代码查找名称
         if (ret.getBooleanValue(CARD_VALIDATED_FLAG)) {
@@ -48,5 +50,20 @@ public class BankNumberHelper {
             ret.put(BANK_NAME_FLAG, BankNameUtil.getName(code));
         }
         return ret;
+    }
+
+    private static JSONObject getResult(HttpResponse resp) throws IOException {
+        String str = EntityUtils.toString(resp.getEntity());
+
+        try {
+            return JSON.parseObject(str);
+        } catch (JSONException e) {
+            log.error(e.getMessage());
+
+            return new JSONObject() {{
+                put("message", e.getMessage());
+                put("result", str);
+            }};
+        }
     }
 }
