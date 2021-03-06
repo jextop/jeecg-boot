@@ -2,7 +2,6 @@ package com.starter.ali.api;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
 import com.common.util.BankNameUtil;
 import com.starter.ali.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -27,40 +26,33 @@ public class BankNumberHelper {
     private static final String CARD_BIN_CHECK_FLAG = "true";
 
     /**
-     * 返回字段
-     */
-    public static final String CARD_VALIDATED_FLAG = "validated";
-    public static final String BANK_CODE_FLAG = "bank";
-    public static final String BANK_NAME_FLAG = "name";
-
-    /**
      * 调用支付宝接口校验
      */
-    public static JSONObject isValid(String bankNumber) throws IOException {
+    public static BankNumberModel isValid(String bankNumber) throws IOException {
         HttpResponse response = HttpUtils.doPost(CARD_URL, null, null, new HashMap<String, String>() {{
             put(CARD_NO, bankNumber);
             put(CARD_BIN_CHECK, CARD_BIN_CHECK_FLAG);
         }}, null);
 
-        JSONObject ret = getResult(response);
+        BankNumberModel ret = getResult(response);
 
         // 根据银行代码查找名称
-        if (ret.getBooleanValue(CARD_VALIDATED_FLAG)) {
-            String code = ret.getString(BANK_CODE_FLAG);
-            ret.put(BANK_NAME_FLAG, BankNameUtil.getName(code));
+        if (ret.isValid()) {
+            String code = ret.getBankCode();
+            ret.setBankName(BankNameUtil.getName(code));
         }
         return ret;
     }
 
-    private static JSONObject getResult(HttpResponse resp) throws IOException {
+    private static BankNumberModel getResult(HttpResponse resp) throws IOException {
         String str = EntityUtils.toString(resp.getEntity());
 
         try {
-            return JSON.parseObject(str);
+            return JSON.parseObject(str, BankNumberModel.class);
         } catch (JSONException e) {
             log.error(e.getMessage());
 
-            return new JSONObject() {{
+            return new BankNumberModel() {{
                 put("message", e.getMessage());
                 put("result", str);
             }};
