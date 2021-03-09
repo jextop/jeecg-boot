@@ -6,6 +6,7 @@ import com.starter.auth.model.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -32,13 +33,13 @@ public class RequestInterceptor implements HandlerInterceptor {
             HttpServletRequest request, HttpServletResponse response, Object handler
     ) throws Exception {
         String method = request.getMethod();
-        if (StringUtils.equalsIgnoreCase("OPTIONS", method)) {
+        if (StringUtils.equalsIgnoreCase(HttpMethod.OPTIONS.name(), method)) {
             return true;
         }
 
         // 输出日志，API调用信息
         UserInfo userInfo = userInfoHelper.getUserInfo();
-        log.info("接口：{} {} 入参：{}; 用户：{}",
+        log.info("接口调用：{} {} 入参：{}; 用户：{}",
                 method, request.getRequestURI(), JSON.toJSONString(request.getParameterMap()),
                 userInfo == null ? null : JSON.toJSONString(userInfo)
         );

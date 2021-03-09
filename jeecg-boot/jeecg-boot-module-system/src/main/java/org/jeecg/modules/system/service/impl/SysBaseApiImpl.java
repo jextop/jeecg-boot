@@ -120,6 +120,9 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		sysLog.setCreateTime(new Date());
 		//保存系统日志
 		sysLogMapper.insert(sysLog);
+
+		//输出日志信息
+		log.info("系统日志：{}", JSON.toJSONString(sysLog));
 	}
 
 	@Override

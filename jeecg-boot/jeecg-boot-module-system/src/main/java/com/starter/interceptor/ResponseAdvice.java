@@ -26,7 +26,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             ServerHttpRequest request, ServerHttpResponse response
     ) {
         // 输出日志，API返回数据
-        log.info("接口：{} {} 返回：{}",
+        log.info("接口返回：{} {} 结果：{}",
                 request.getMethodValue(), request.getURI().getPath(), JSON.toJSONString(body)
         );
 
