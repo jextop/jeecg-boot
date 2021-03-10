@@ -10,6 +10,8 @@ import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.starter.ali.sms.entity.ApiCallSms;
+import com.starter.ali.sms.service.IApiCallSmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author dingxl
@@ -28,10 +32,12 @@ import java.time.format.DateTimeFormatter;
 public class SmsService {
     SmsConfig smsConfig;
     IAcsClient client;
+    IApiCallSmsService apiCallService;
 
     @Autowired
-    public SmsService(SmsConfig smsConfig) {
+    public SmsService(SmsConfig smsConfig, IApiCallSmsService apiCallService) {
         this.smsConfig = smsConfig;
+        this.apiCallService = apiCallService;
 
         DefaultProfile profile = DefaultProfile.getProfile(
                 smsConfig.getRegion(), smsConfig.getAccessKey(), smsConfig.getSecretKey()
@@ -46,7 +52,7 @@ public class SmsService {
     }
 
     public SmsModel sendSms(String phone, SmsTemplate template, JSONObject params) throws ClientException {
-        return sendRequest(new CommonRequest() {{
+        SmsModel ret = sendRequest(new CommonRequest() {{
             setSysAction("SendSms");
             putQueryParameter("SignName", smsConfig.getSignName());
             putQueryParameter("PhoneNumbers", phone);
@@ -56,10 +62,20 @@ public class SmsService {
                 putQueryParameter("TemplateParam", JSON.toJSONString(params));
             }
         }});
+
+        apiCallService.save(new ApiCallSms() {{
+            setPhoneNumber(phone);
+            setSmsCode(params.getString("code"));
+            setBizId(ret.getBizId());
+            setRequestId(ret.getRequestId());
+            setErrMsg(params.toJSONString());
+        }});
+        return ret;
     }
 
     public SmsModel sendBatch(SmsTemplate template, JSONArray params) throws ClientException {
         JSONArray signArr = new JSONArray(), phoneArr = new JSONArray(), paramArr = new JSONArray();
+        List<ApiCallSms> smsList = new ArrayList<>();
 
         for (int i = 0; i < params.size(); i++) {
             JSONObject param = params.getJSONObject(i);
@@ -71,15 +87,29 @@ public class SmsService {
             signArr.add(smsConfig.getSignName());
             phoneArr.add(phone);
             paramArr.add(param);
+
+            smsList.add(new ApiCallSms() {{
+                setPhoneNumber(phone);
+                setSmsCode(param.getString("code"));
+                setErrMsg(param.toJSONString());
+            }});
         }
 
-        return sendRequest(new CommonRequest() {{
+        SmsModel ret = sendRequest(new CommonRequest() {{
             setSysAction("SendBatchSms");
             putQueryParameter("SignNameJson", signArr.toJSONString());
             putQueryParameter("PhoneNumberJson", phoneArr.toJSONString());
             putQueryParameter("TemplateCode", template.getCode());
             putQueryParameter("TemplateParamJson", paramArr.toJSONString());
         }});
+
+        for (ApiCallSms sms : smsList) {
+            sms.setBizId(ret.getBizId());
+            sms.setRequestId(ret.getRequestId());
+        }
+
+        apiCallService.saveBatch(smsList);
+        return ret;
     }
 
     public SmsModel querySms(String phone, LocalDate date, int pageNo, int pageSize) throws ClientException {
