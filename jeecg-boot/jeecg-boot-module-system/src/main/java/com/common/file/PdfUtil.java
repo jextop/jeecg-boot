@@ -70,7 +70,7 @@ public class PdfUtil {
             String key = fieldEntry.getKey();
             String name = nameMap != null && nameMap.containsKey(key) ? nameMap.get(key) : key;
             String value = valueMap.get(name);
-            log.info(String.format("field: %s, name: %s, value: %s", key, name, value));
+            log.info("field: {}, name: {}, value: {}", key, name, value);
 
             PdfFormField field = fieldEntry.getValue();
             if (field != null && value != null) {

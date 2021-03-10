@@ -114,7 +114,7 @@ public class PdfUtilTest {
             for (Map.Entry<String, PdfFormField> fieldEntry : fieldMap.entrySet()) {
                 String name = fieldEntry.getKey();
                 String value = valueMap.get(name);
-                log.info(String.format("field name: %s, value: %s", name, value));
+                log.info("field name: {}, value: {}", name, value);
 
                 PdfFormField field = fieldEntry.getValue();
                 if (field != null && value != null) {

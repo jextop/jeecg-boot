@@ -11,4 +11,5 @@ git push gitee master
 git push github master
 
 git checkout rel
+git push origin rel
 git status
