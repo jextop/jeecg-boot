@@ -12,11 +12,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Slf4j
+@EnableScheduling
 @SpringBootApplication
 @ComponentScan({"org.jeecg", "com.starter"})
 public class JeecgApplication extends SpringBootServletInitializer {
