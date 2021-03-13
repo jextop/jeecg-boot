@@ -77,11 +77,12 @@
         <a-form-item label="租户分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!departDisabled">
 
           <a-select
-            mode="multiple"
+            mode="single"
             style="width: 100%"
             placeholder="请选择租户分配"
             :disabled="disableSubmit"
             v-model="currentTenant">
+            <a-select-option :value="0">请选择</a-select-option>
             <a-select-option v-for="(item, index) in tenantList" :key="index" :value="item.id">
               {{ item.name }}
             </a-select-option>
@@ -279,7 +280,7 @@
         identity:"1",
         fileList:[],
         tenantList: [],
-        currentTenant:[]
+        currentTenant:""
       }
     },
     created () {
@@ -340,7 +341,7 @@
           this.resultDepartOptions=[];
           this.departId=[];
           this.departIdShow=false;
-          this.currentTenant = []
+          this.currentTenant = ""
       },
       add () {
         this.picUrl = "";
@@ -379,9 +380,9 @@
 
         //update-begin-author:taoyan date:2020710 for:多租户配置
         if(!record.relTenantIds || record.relTenantIds.length==0){
-          this.currentTenant = []
+          this.currentTenant = ""
         }else{
-          this.currentTenant = record.relTenantIds.split(',').map(Number);
+          this.currentTenant = record.relTenantIds.split(',').map(Number)[0];
         }
         //update-end-author:taoyan date:2020710 for:多租户配置
       },
@@ -453,8 +454,8 @@
             }else{
               formData.avatar = null;
             }
-            //update-begin-author:taoyan date:2020710 for:多租户配置
-            formData.relTenantIds = this.currentTenant.length>0?this.currentTenant.join(','):''
+            //update-begin-author:taoyan date:2020710 for:多租户配置。支持多个租户时拼接id：.length>0?this.currentTenant.join(','):''
+            formData.relTenantIds = this.currentTenant;
             //update-end-author:taoyan date:2020710 for:多租户配置
             formData.selectedroles = this.selectedRole.length>0?this.selectedRole.join(","):'';
             formData.selecteddeparts = this.userDepartModel.departIdList.length>0?this.userDepartModel.departIdList.join(","):'';

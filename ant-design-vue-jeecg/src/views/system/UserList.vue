@@ -262,6 +262,12 @@
             dataIndex: 'soloLogin'
           },
           {
+            title: '多租户ID',
+            align: "center",
+            width: 100,
+            dataIndex: 'relTenantIds'
+          },
+          {
             title: '部门',
             align: "center",
             width: 180,
